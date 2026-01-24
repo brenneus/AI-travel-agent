@@ -1,0 +1,29 @@
+--- DEEP SEARCH RESULTS: JFK -> SRQ ---
+Query Dates: 2026-02-12 to 2026-02-16
+Total Itineraries Found: 3
+============================================================
+
+ITINERARY #1
+   ✈️  Airlines:    JetBlue (Out) / JetBlue (Ret)
+   💰 Total Price: $709.0
+   📅 Schedule:
+       • OUT: 12:59 PM - 4:14 PM
+       • RET: 8:59 PM - 11:48 PM
+   🔗 Deep Link:   https://www.google.com/travel/flights/search?tfs=CBwQAho_EgoyMDI2LTAyLTEyIh8KA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJCNjIDMTYzagcIARIDSkZLcgcIARIDU1JRGh4SCjIwMjYtMDItMTZqBwgBEgNTUlFyBwgBEgNKRktAAUgBcAGCAQsI____________AZgBAQ&tfu=CmxDalJJUkc1VE1IVnNWR054WkZsQlJtRkJkR2RDUnkwdExTMHRMUzB0TFhaMGNuUXhPRUZCUVVGQlIyd3dVSFUwUTFsUlgzTkJFZ1ZDTmpFMk14b0xDT3FwQkJBQ0dnTlZVMFE0SFhEcXFRUT0SAggAIgA
+------------------------------------------------------------
+ITINERARY #2
+   ✈️  Airlines:    Delta (Out) / Delta (Ret)
+   💰 Total Price: $737.0
+   📅 Schedule:
+       • OUT: 1:35 PM - 4:50 PM
+       • RET: 6:00 AM - 11:15 AM
+   🔗 Deep Link:   https://www.google.com/travel/flights/search?tfs=CBwQAhpAEgoyMDI2LTAyLTEyIiAKA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJETDIEMjUyMWoHCAESA0pGS3IHCAESA1NSURoeEgoyMDI2LTAyLTE2agcIARIDU1JRcgcIARIDSkZLQAFIAXABggELCP___________wGYAQE&tfu=CmxDalJJZGxWSU1DMVZWRkZsVTFsQlJuRkNibmRDUnkwdExTMHRMUzB0TFhaM1ltVmtNMEZCUVVGQlIyd3dVSFpKU2kxUldUUkJFZ1pFVERJMU1qRWFDd2pOdndRUUFob0RWVk5FT0Ixd3piOEUSAggAIgA
+------------------------------------------------------------
+ITINERARY #3
+   ✈️  Airlines:    JetBlue (Out) / JetBlue (Ret)
+   💰 Total Price: $813.0
+   📅 Schedule:
+       • OUT: 4:52 PM - 8:07 PM
+       • RET: 8:59 PM - 11:48 PM
+   🔗 Deep Link:   https://www.google.com/travel/flights/search?tfs=CBwQAho_EgoyMDI2LTAyLTEyIh8KA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJCNjIDNDYzagcIARIDSkZLcgcIARIDU1JRGh4SCjIwMjYtMDItMTZqBwgBEgNTUlFyBwgBEgNKRktAAUgBcAGCAQsI____________AZgBAQ&tfu=CmxDalJJWm5GM1VYZE9aVUpXZVdOQlJscGxaRkZDUnkwdExTMHRMUzB0TFMxMmQybDFPVUZCUVVGQlIyd3dVSFpaVGtoQk5XdEJFZ1ZDTmpRMk14b0xDSXY3QkJBQ0dnTlZVMFE0SFhDTCt3UT0SAggAIgMKATA
+------------------------------------------------------------
