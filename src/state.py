@@ -35,6 +35,7 @@ class ExcursionOption(BaseModel):
     date: str
     price: float
     description: Optional[str] = None
+    booking_link: Optional[str] = None
 
 # THE AGENT STATE (The "data" passed between nodes)
 # This TypedDict defines exactly what the Agent is allowed to remember.
@@ -54,8 +55,12 @@ class AgentState(TypedDict):
     excursion_options: Annotated[List[ExcursionOption], operator.add]
 
     # SECTION C: The Final Selection - The specific items the user has agreed to book.
-    selected_flight: Optional[FlightOption]
+    selected_outbound_flight: Optional[FlightOption]
+    selected_return_flight: Optional[FlightOption]
+    
     selected_hotel: Optional[HotelOption]
+    
+    selected_excursions: List[ExcursionOption]
     
     # SECTION D: System Status - Tracks the conversation and booking progress.
     messages: Annotated[List[str], operator.add] # Chat history
