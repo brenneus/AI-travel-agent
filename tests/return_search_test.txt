@@ -1,0 +1,26 @@
+--- RETURN SEARCH RESULTS ---
+Based on Outbound: JetBlue (4:52 PM - 8:07 PM)
+Total Options Found: 3
+============================================================
+
+RETURN OPTION #1
+   ✈️  Airline:     JetBlue
+   💰 Total Price: $653.0
+   ⏰ Depart:      8:59 PM
+   🛬 Arrive:      11:48 PM
+   🔗 Booking URL: https://www.google.com/travel/flights/search?tfs=CBwQAho_EgoyMDI2LTAyLTEyIh8KA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJCNjIDNDYzagcIARIDSkZLcgcIARIDU1JRGh4SCjIwMjYtMDItMTZqBwgBEgNTUlFyBwgBEgNKRktAAUgBcAGCAQsI____________AZgBAQ&tfu=CmxDalJJUkVWeU4wMDVSMUZTVjI5QlFrSnZjWGRDUnkwdExTMHRMUzB0TFMxMmRIZGhORUZCUVVGQlIydzFWemRGUjJ3elozZEJFZ1ZDTmpRMk14b0xDSlQrQXhBQ0dnTlZVMFE0SFhDVS9nTT0SAggAIgMKATA
+------------------------------------------------------------
+RETURN OPTION #2
+   ✈️  Airline:     Delta
+   💰 Total Price: $908.0
+   ⏰ Depart:      5:44 PM
+   🛬 Arrive:      8:35 PM
+   🔗 Booking URL: https://www.google.com/travel/flights/search?tfs=CBwQAho_EgoyMDI2LTAyLTEyIh8KA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJCNjIDNDYzagcIARIDSkZLcgcIARIDU1JRGh4SCjIwMjYtMDItMTZqBwgBEgNTUlFyBwgBEgNKRktAAUgBcAGCAQsI____________AZgBAQ&tfu=CmxDalJJUkVWeU4wMDVSMUZTVjI5QlFrSnZjWGRDUnkwdExTMHRMUzB0TFMxMmRIZGhORUZCUVVGQlIydzFWemRGUjJ3elozZEJFZ1ZDTmpRMk14b0xDSlQrQXhBQ0dnTlZVMFE0SFhDVS9nTT0SAggAIgMKATA
+------------------------------------------------------------
+RETURN OPTION #3
+   ✈️  Airline:     JetBlue
+   💰 Total Price: $935.0
+   ⏰ Depart:      5:10 PM
+   🛬 Arrive:      8:04 PM
+   🔗 Booking URL: https://www.google.com/travel/flights/search?tfs=CBwQAho_EgoyMDI2LTAyLTEyIh8KA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJCNjIDNDYzagcIARIDSkZLcgcIARIDU1JRGh4SCjIwMjYtMDItMTZqBwgBEgNTUlFyBwgBEgNKRktAAUgBcAGCAQsI____________AZgBAQ&tfu=CmxDalJJUkVWeU4wMDVSMUZTVjI5QlFrSnZjWGRDUnkwdExTMHRMUzB0TFMxMmRIZGhORUZCUVVGQlIydzFWemRGUjJ3elozZEJFZ1ZDTmpRMk14b0xDSlQrQXhBQ0dnTlZVMFE0SFhDVS9nTT0SAggAIgMKATA
+------------------------------------------------------------
