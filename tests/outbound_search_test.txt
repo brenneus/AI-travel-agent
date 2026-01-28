@@ -1,0 +1,68 @@
+--- OUTBOUND SEARCH RESULTS: JFK -> SRQ ---
+Query: 2026-02-12 returning 2026-02-16
+Total Options Found: 9
+============================================================
+
+OPTION #1
+   ✈️  Airline:     JetBlue
+   💰 Est. Price:  $653.0
+   ⏰ Depart:      12:59 PM
+   🛬 Arrive:      4:14 PM
+   🔗 Search URL:  https://www.google.com/travel/flights?q=Flights+from+JFK+to+SRQ+on+2026-02-12+returning+2026-02-16
+------------------------------------------------------------
+OPTION #2
+   ✈️  Airline:     JetBlue
+   💰 Est. Price:  $653.0
+   ⏰ Depart:      4:52 PM
+   🛬 Arrive:      8:07 PM
+   🔗 Search URL:  https://www.google.com/travel/flights?q=Flights+from+JFK+to+SRQ+on+2026-02-12+returning+2026-02-16
+------------------------------------------------------------
+OPTION #3
+   ✈️  Airline:     Delta
+   💰 Est. Price:  $803.0
+   ⏰ Depart:      1:35 PM
+   🛬 Arrive:      4:50 PM
+   🔗 Search URL:  https://www.google.com/travel/flights?q=Flights+from+JFK+to+SRQ+on+2026-02-12+returning+2026-02-16
+------------------------------------------------------------
+OPTION #4
+   ✈️  Airline:     American
+   💰 Est. Price:  $578.0
+   ⏰ Depart:      8:29 AM
+   🛬 Arrive:      1:46 PM
+   🔗 Search URL:  https://www.google.com/travel/flights?q=Flights+from+JFK+to+SRQ+on+2026-02-12+returning+2026-02-16
+------------------------------------------------------------
+OPTION #5
+   ✈️  Airline:     American
+   💰 Est. Price:  $578.0
+   ⏰ Depart:      10:59 AM
+   🛬 Arrive:      6:59 PM
+   🔗 Search URL:  https://www.google.com/travel/flights?q=Flights+from+JFK+to+SRQ+on+2026-02-12+returning+2026-02-16
+------------------------------------------------------------
+OPTION #6
+   ✈️  Airline:     American
+   💰 Est. Price:  $578.0
+   ⏰ Depart:      2:30 PM
+   🛬 Arrive:      8:53 PM
+   🔗 Search URL:  https://www.google.com/travel/flights?q=Flights+from+JFK+to+SRQ+on+2026-02-12+returning+2026-02-16
+------------------------------------------------------------
+OPTION #7
+   ✈️  Airline:     American
+   💰 Est. Price:  $697.0
+   ⏰ Depart:      7:55 AM
+   🛬 Arrive:      1:06 PM
+   🔗 Search URL:  https://www.google.com/travel/flights?q=Flights+from+JFK+to+SRQ+on+2026-02-12+returning+2026-02-16
+------------------------------------------------------------
+OPTION #8
+   ✈️  Airline:     Delta
+   💰 Est. Price:  $827.0
+   ⏰ Depart:      6:00 AM
+   🛬 Arrive:      12:22 PM
+   🔗 Search URL:  https://www.google.com/travel/flights?q=Flights+from+JFK+to+SRQ+on+2026-02-12+returning+2026-02-16
+------------------------------------------------------------
+OPTION #9
+   ✈️  Airline:     Delta
+   💰 Est. Price:  $947.0
+   ⏰ Depart:      7:00 PM
+   🛬 Arrive:      11:58 PM
+   🔗 Search URL:  https://www.google.com/travel/flights?q=Flights+from+JFK+to+SRQ+on+2026-02-12+returning+2026-02-16
+------------------------------------------------------------
