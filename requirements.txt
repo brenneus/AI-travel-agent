@@ -4,7 +4,7 @@ langgraph>=0.2.0
 langchain-community     # Needed for generic tools and helpers
 
 # --- The Brain (Models) ---
-langchain-anthropic     # Specifically for Claude 3.5 Sonnet
+langchain-google-genai     # Specifically for Claude 3.5 Sonnet
 
 # --- The Hands (Browser Automation) ---
 playwright              # The engine that controls the browser

@@ -16,12 +16,12 @@ async def run_return_test():
     print("   Goal: Find and Click the exact 'JetBlue' flight using 4 data points.")
 
     # --- MOCK INPUTS (Matching your Option #2) ---
-    mock_search_url = " https://www.google.com/travel/flights?q=Flights+from+JFK+to+SRQ+on+2026-02-12+returning+2026-02-16"
+    mock_search_url = "https://www.google.com/travel/flights?q=Flights+from+JFK+to+SRQ+on+2026-02-12+returning+2026-02-16"
     # These must match Option #2 EXACTLY
     mock_airline = "JetBlue"
-    mock_dep_time = "4:52 PM" 
-    mock_arr_time = "8:07 PM"
-    mock_price = 653.0
+    mock_dep_time = "12:59 PM"
+    mock_arr_time = "4:14 PM"
+    mock_price = 813.0
 
     print(f"   🎯 Target Fingerprint:")
     print(f"      - Airline: {mock_airline}")
