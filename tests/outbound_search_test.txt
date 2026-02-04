@@ -1,6 +1,6 @@
 --- OUTBOUND SEARCH RESULTS: JFK -> SRQ ---
 Query: 2026-02-12 returning 2026-02-16
-Total Options Found: 8
+Total Options Found: 6
 ============================================================
 
 OPTION #1
@@ -23,7 +23,7 @@ OPTION #2
 ------------------------------------------------------------
 OPTION #3
    ✈️  Airline:     Delta
-   💰 Est. Price:  $863.0
+   💰 Est. Price:  $957.0
    ⏰ Depart:      1:35 PM
    🛬 Arrive:      4:50 PM
    ⏱️  Duration:    3 hr 15 min
@@ -32,7 +32,7 @@ OPTION #3
 ------------------------------------------------------------
 OPTION #4
    ✈️  Airline:     American
-   💰 Est. Price:  $568.0
+   💰 Est. Price:  $667.0
    ⏰ Depart:      8:29 AM
    🛬 Arrive:      1:46 PM
    ⏱️  Duration:    5 hr 17 min
@@ -41,7 +41,7 @@ OPTION #4
 ------------------------------------------------------------
 OPTION #5
    ✈️  Airline:     American
-   💰 Est. Price:  $767.0
+   💰 Est. Price:  $827.0
    ⏰ Depart:      7:55 AM
    🛬 Arrive:      1:06 PM
    ⏱️  Duration:    5 hr 11 min
@@ -50,28 +50,10 @@ OPTION #5
 ------------------------------------------------------------
 OPTION #6
    ✈️  Airline:     American
-   💰 Est. Price:  $767.0
-   ⏰ Depart:      2:30 PM
-   🛬 Arrive:      8:53 PM
-   ⏱️  Duration:    6 hr 23 min
-   🛑 Stops:       1 Stop(s)
-   🔗 Search URL:  https://www.google.com/travel/flights?q=Flights+from+JFK+to+SRQ+on+2026-02-12+returning+2026-02-16
-------------------------------------------------------------
-OPTION #7
-   ✈️  Airline:     American
-   💰 Est. Price:  $867.0
+   💰 Est. Price:  $927.0
    ⏰ Depart:      6:29 PM
    🛬 Arrive:      11:59 PM
    ⏱️  Duration:    5 hr 30 min
-   🛑 Stops:       1 Stop(s)
-   🔗 Search URL:  https://www.google.com/travel/flights?q=Flights+from+JFK+to+SRQ+on+2026-02-12+returning+2026-02-16
-------------------------------------------------------------
-OPTION #8
-   ✈️  Airline:     Delta
-   💰 Est. Price:  $1117.0
-   ⏰ Depart:      7:00 PM
-   🛬 Arrive:      11:58 PM
-   ⏱️  Duration:    4 hr 58 min
    🛑 Stops:       1 Stop(s)
    🔗 Search URL:  https://www.google.com/travel/flights?q=Flights+from+JFK+to+SRQ+on+2026-02-12+returning+2026-02-16
 ------------------------------------------------------------

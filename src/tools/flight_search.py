@@ -50,13 +50,13 @@ async def _extract_card_data(card: Locator) -> dict:
     dep_time = time_matches[0] if time_matches else "Unknown"
     arr_time = time_matches[-1] if len(time_matches) > 1 else "Unknown"
 
-    # 4. Duration 
+    # 4. Duration
     duration = "Unknown"
     duration_match = re.search(r'(\d+\s*hr\s*\d*\s*min|\d+\s*hr)', text)
     if duration_match:
         duration = duration_match.group(0)
     
-    # 5. Stops 
+    # 5. Stops
     stops = "Unknown"
     if "nonstop" in text.lower():
         stops = "Nonstop"
@@ -118,8 +118,8 @@ async def search_outbound_flights(origin: str, destination: str, depart_date: st
                     arrival_city=destination,
                     departure_time=data['dep_time'],
                     arrival_time=data['arr_time'],
-                    duration=data['duration'], # <--- ADDED
-                    stops=data['stops'],       # <--- ADDED
+                    duration=data['duration'],
+                    stops=data['stops'],
                     price=data['price'],
                     booking_link=page.url 
                 )
@@ -133,7 +133,7 @@ async def search_outbound_flights(origin: str, destination: str, depart_date: st
     return results
 
 # ------------------------------------------------------------------
-# TOOL 2: SMART RETURN SEARCH
+# TOOL 2: SMART RETURN SEARCH (Reverted to < $2.0 tolerance)
 # ------------------------------------------------------------------
 @tool
 async def search_return_flights(
@@ -142,18 +142,16 @@ async def search_return_flights(
     outbound_departure_time: str, 
     outbound_arrival_time: str, 
     outbound_price: float,
-    outbound_stops: str # <--- Added as required parameter
+    outbound_stops: str
 ) -> List[FlightOption]:
     """
-    Step 2: Search for RETURN flights. 
-    Requires STRICT matching of Airline, Time, Price, AND Stops to ensure we click the right flight.
+    Step 2: Search for RETURN flights. Requires strict matching of the outbound flight.
     """
     print(f"✈️  Tool 2: Re-locating Outbound Flight (Strict Match)...")
     
     results = []
     seen_ids: Set[str] = set()
     
-    # Target Fingerprint
     target_airline = normalize_text(outbound_airline)
     target_dep = normalize_text(outbound_departure_time)
     target_arr = normalize_text(outbound_arrival_time)
@@ -176,26 +174,23 @@ async def search_return_flights(
                 data = await _extract_card_data(card)
                 if not data: continue
                 
-                # Card Fingerprint
                 card_airline = normalize_text(data['airline'])
                 card_dep = normalize_text(data['dep_time'])
                 card_arr = normalize_text(data['arr_time'])
                 card_stops = normalize_text(data['stops'])
                 
-                # 1. Check Matches
                 airline_match = (target_airline in card_airline) or (card_airline in target_airline)
                 time_match = (target_dep == card_dep) and (target_arr == card_arr)
                 stops_match = (target_stops == card_stops)
-                price_match = abs(data['price'] - outbound_price) < 2.0 # Strict price check
+                # REVERTED: Strict tolerance
+                price_match = abs(data['price'] - outbound_price) < 2.0 
 
-                # 2. Strict Decision
                 if airline_match and time_match and stops_match and price_match:
                     target_card = card
-                    print(f"   🎯 MATCH FOUND: {data['airline']} {data['dep_time']} (${data['price']})")
                     break
             
             if not target_card:
-                print(f"❌ Critical: Could not re-locate outbound flight. Matches failed.")
+                print(f"❌ Critical: Could not re-locate outbound flight.")
                 return []
             
             await target_card.click()
@@ -235,17 +230,27 @@ async def search_return_flights(
     return results
 
 # ------------------------------------------------------------------
-# TOOL 3: FINAL BOOKING LINK
+# TOOL 3: FINAL BOOKING LINK (Reverted to < $2.0 tolerance)
 # ------------------------------------------------------------------
 @tool
-async def generate_booking_link(search_url: str, return_airline: str, return_departure_time: str, return_price: float) -> str:
+async def generate_booking_link(
+    search_url: str, 
+    return_airline: str, 
+    return_departure_time: str, 
+    return_arrival_time: str, 
+    return_price: float,
+    return_stops: str
+) -> str:
     """
-    Step 3: FINAL STEP. Selects the return flight and extracts the final booking URL.
+    Step 3: FINAL STEP. Selects the return flight using STRICT MATCHING and extracts the final booking URL.
     """
-    print(f"✈️  Tool 3: Generating Final Booking Link...")
+    print(f"✈️  Tool 3: Generating Final Booking Link (Strict Match)...")
     
     target_airline = normalize_text(return_airline)
     target_dep = normalize_text(return_departure_time)
+    target_arr = normalize_text(return_arrival_time)
+    target_stops = normalize_text(return_stops)
+    
     final_url = "Error: Could not generate link"
 
     async with async_playwright() as p:
@@ -254,9 +259,11 @@ async def generate_booking_link(search_url: str, return_airline: str, return_dep
         page = await context.new_page()
         
         try:
+            # 1. Go to the page where Outbound is already selected
             await page.goto(search_url, timeout=Config.TIMEOUT)
             await page.wait_for_selector('div[role="main"]', state="visible", timeout=15000)
             
+            # 2. Find the Return Flight
             cards = await page.locator('div[role="main"] li').all()
             target_card = None
             
@@ -264,14 +271,21 @@ async def generate_booking_link(search_url: str, return_airline: str, return_dep
                 data = await _extract_card_data(card)
                 if not data: continue
                 
+                # Card Fingerprint
                 card_airline = normalize_text(data['airline'])
                 card_dep = normalize_text(data['dep_time'])
+                card_arr = normalize_text(data['arr_time'])
+                card_stops = normalize_text(data['stops'])
                 
+                # Matching Logic
                 airline_match = (target_airline in card_airline) or (card_airline in target_airline)
-                time_match = (target_dep == card_dep)
+                time_match = (target_dep == card_dep) and (target_arr == card_arr)
+                stops_match = (target_stops == card_stops)
+                price_match = abs(data['price'] - return_price) < 2.0
                 
-                if airline_match and time_match:
+                if airline_match and time_match and stops_match and price_match:
                     target_card = card
+                    print(f"   🎯 RETURN MATCH FOUND: {data['airline']} {data['dep_time']}")
                     break
             
             if target_card:
