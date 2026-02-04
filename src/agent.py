@@ -1,7 +1,7 @@
 import operator
 from typing import Annotated, List, Literal, Union
 
-# 1. Load Environment Variables (API Key)
+# 1. Load Environment Variables
 from dotenv import load_dotenv
 load_dotenv() 
 
@@ -19,36 +19,60 @@ from src.config import Config
 # 3. SETUP THE BRAIN
 # ------------------------------------------------------------------
 
-# We use the model name defined in your Config file (gemini-3-flash-preview)
-# Ensure GOOGLE_API_KEY is in your .env file
 llm = ChatGoogleGenerativeAI(
     model=Config.MODEL_NAME, 
-    temperature=0,       # 0 is strictly required for accurate tool inputs
+    temperature=0, 
     max_retries=2,
 )
 
-# Bind our "Surgical Tools" to the LLM
 tools = [search_outbound_flights, search_return_flights]
 llm_with_tools = llm.bind_tools(tools)
 
 # ------------------------------------------------------------------
-# 4. DEFINE THE SYSTEM PROMPT
+# 4. DEFINE THE "ARCHITECT" SYSTEM PROMPT
 # ------------------------------------------------------------------
 
-SYSTEM_PROMPT = """You are an expert Flight Booking Agent. 
-Your goal is to help the user plan a round-trip flight.
+SYSTEM_PROMPT = """You are an intelligent Flight Planning Agent.
+Your goal is to plan a complete round-trip itinerary for the user.
 
-Follow this STRICT workflow:
-1.  **Search Outbound:** Use `search_outbound_flights` first.
-2.  **Present Options:** List the airlines, times, and prices found. ASK the user to pick one.
-3.  **Wait for Selection:** Do NOT guess. Wait for the user to say "I want Option 2" or "The JetBlue one".
-4.  **Search Return:** Once the user picks an outbound flight, use `search_return_flights`. 
-    * You MUST extract the `search_url`, `airline`, `departure_time`, `arrival_time`, and `price` from the selected option to call this tool correctly.
-5.  **Finalize:** Present the matching return flights.
+**PHASE 1: CLARIFICATION (The "Pre-Flight Check")**
+Before searching, you must ensure you have precise data.
+Analyze the user's request for these 4 keys. If any are missing or vague, ASK.
 
-**CRITICAL RULES:**
-* Never make up flights. Only use data from the tools.
-* If you cannot find the return flight (tool returns empty), ask the user to pick a different outbound flight.
+1.  **Airports:** * Convert cities to Airport Codes (e.g., "New York" -> JFK, LGA, or EWR).
+    * *CRITICAL:* If a city has multiple airports (NY, London, DC, Tokyo, etc.), ASK the user if they have a preference or if "Any" is okay. 
+2.  **Stops:** (Non-stop vs. Any)
+3.  **Airline:** (Specific vs. No preference)
+4.  **Timing:** (Morning/Afternoon/Night vs. Anytime)
+
+**PHASE 2: AUTONOMOUS EXECUTION (Strict Tool usage)**
+Once you have the data, execute the workflow without stopping.
+
+**Step 1: Search Outbound**
+* Call `search_outbound_flights`.
+* **FORMATTING RULES:**
+    * `origin`: Use the IATA code (e.g., "JFK").
+    * `destination`: Use the IATA code (e.g., "LHR").
+    * `depart_date`: Convert "next friday" etc. to `YYYY-MM-DD` format.
+    * `return_date`: Convert "following monday" etc. to `YYYY-MM-DD` format.
+
+**Step 2: Autonomous Selection**
+* Review the results from Step 1.
+* Pick the **single best flight** matching the User's Phase 1 preferences.
+* *Tie-breaker:* Cheapest price wins.
+
+**Step 3: Search Return (The Handshake)**
+* Call `search_return_flights`.
+* **CRITICAL:** You must pass the EXACT values from the flight selected in Step 2:
+    * `search_url`: Must be the `booking_link` from the chosen outbound flight.
+    * `outbound_airline`: Exact airline name.
+    * `outbound_departure_time`: Exact string (e.g. "12:59 PM").
+    * `outbound_arrival_time`: Exact string.
+    * `outbound_price`: Exact float (e.g., 813.0).
+
+**Step 4: Finalize**
+* Select the best matching return flight.
+* Present the final itinerary with Total Price and a link.
 """
 
 # ------------------------------------------------------------------
@@ -59,7 +83,6 @@ def chatbot_node(state: AgentState):
     """
     The central node. It looks at the conversation history and decides what to do next.
     """
-    # We prepend the System Prompt to the history every time so the agent never forgets its role
     messages = [SystemMessage(content=SYSTEM_PROMPT)] + state["messages"]
     result = llm_with_tools.invoke(messages)
     return {"messages": [result]}
@@ -85,12 +108,10 @@ def should_continue(state: AgentState) -> Literal["tools", "__end__"]:
 def create_agent():
     workflow = StateGraph(AgentState)
 
-    # A. Add Nodes
     workflow.add_node("agent", chatbot_node)
     tool_node = ToolNode(tools)
     workflow.add_node("tools", tool_node)
 
-    # B. Define Edges
     workflow.set_entry_point("agent")
     workflow.add_conditional_edges("agent", should_continue)
     workflow.add_edge("tools", "agent")
@@ -102,7 +123,7 @@ def create_agent():
 # ------------------------------------------------------------------
 
 if __name__ == "__main__":
-    print(f"🤖 Flight Agent Initialized ({Config.MODEL_NAME}). Type 'q' to quit.")
+    print(f"🤖 Flight Architect Initialized ({Config.MODEL_NAME}). Type 'q' to quit.")
     
     agent = create_agent()
     chat_history = []
@@ -111,18 +132,14 @@ if __name__ == "__main__":
         user_input = input("\n👤 User: ")
         if user_input.lower() in ["q", "quit"]: break
         
-        # Add user message to history
         chat_history.append(HumanMessage(content=user_input))
         
         initial_state = {
             "messages": chat_history,
-            "origin": "JFK", 
-            "destination": "LHR"
         }
         
         print("   (Thinking...)")
         
-        # Stream events
         try:
             events = agent.stream(initial_state, stream_mode="values")
             
@@ -130,16 +147,15 @@ if __name__ == "__main__":
                 if "messages" in event:
                     last_msg = event["messages"][-1]
                     
-                    # Visual Logging
                     if isinstance(last_msg, AIMessage) and last_msg.tool_calls:
-                        print(f"   ⚙️  AI Calling Tool: {last_msg.tool_calls[0]['name']}")
+                        print(f"   ⚙️  Action: {last_msg.tool_calls[0]['name']}")
+                        # Debug: Print arguments to verify data structure
+                        print(f"       Args: {last_msg.tool_calls[0]['args']}")
                     elif last_msg.type == "tool":
-                        print(f"   ✅ Tool Result Received")
+                        print(f"   ✅ Data Received.")
                     elif isinstance(last_msg, AIMessage) and not last_msg.tool_calls:
                         print(f"🤖 Agent: {last_msg.content}")
-                        # Update history so the agent remembers the conversation
                         chat_history = event["messages"]
                         
         except Exception as e:
             print(f"❌ Error: {e}")
-            print("   (Check your .env file or API Quota)")
