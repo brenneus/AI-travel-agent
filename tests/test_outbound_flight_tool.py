@@ -15,7 +15,6 @@ async def run_test():
     print("🧪 Starting OUTBOUND Flight Search Test (Fast Scrape)...")
     
     # Run Tool 1 with BOTH dates
-    # Note: This should now return ALL valid options found on the first page
     results = await search_outbound_flights.ainvoke({
         "origin": "JFK", 
         "destination": "SRQ", 
@@ -42,7 +41,8 @@ async def run_test():
                 f.write(f"   💰 Est. Price:  ${flight.price}\n")
                 f.write(f"   ⏰ Depart:      {flight.departure_time}\n")
                 f.write(f"   🛬 Arrive:      {flight.arrival_time}\n")
-                # The booking link will now be the general search URL
+                f.write(f"   ⏱️  Duration:    {flight.duration}\n")
+                f.write(f"   🛑 Stops:       {flight.stops}\n")
                 f.write(f"   🔗 Search URL:  {flight.booking_link}\n") 
                 f.write("-" * 60 + "\n")
                 

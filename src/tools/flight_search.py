@@ -17,6 +17,9 @@ def normalize_text(text: str) -> str:
     return text.lower().replace(" ", "").replace("\u00a0", "").replace("\u202f", "").strip()
 
 async def _extract_card_data(card: Locator) -> dict:
+    """
+    Extracts text, price, airline, times, duration, and stops from a flight card.
+    """
     try:
         text = await card.text_content(timeout=500)
     except:
@@ -46,12 +49,31 @@ async def _extract_card_data(card: Locator) -> dict:
     time_matches = re.findall(r'(\d{1,2}:\d{2}\s?[AP]M)', text)
     dep_time = time_matches[0] if time_matches else "Unknown"
     arr_time = time_matches[-1] if len(time_matches) > 1 else "Unknown"
+
+    # 4. Duration 
+    duration = "Unknown"
+    duration_match = re.search(r'(\d+\s*hr\s*\d*\s*min|\d+\s*hr)', text)
+    if duration_match:
+        duration = duration_match.group(0)
+    
+    # 5. Stops 
+    stops = "Unknown"
+    if "nonstop" in text.lower():
+        stops = "Nonstop"
+    else:
+        stops_match = re.search(r'(\d+)\s*stop', text.lower())
+        if stops_match:
+            stops = f"{stops_match.group(1)} Stop(s)"
+        else:
+            stops = "Unknown" 
     
     return {
         "airline": airline,
         "price": price,
         "dep_time": dep_time,
-        "arr_time": arr_time
+        "arr_time": arr_time,
+        "duration": duration,
+        "stops": stops
     }
 
 # ------------------------------------------------------------------
@@ -96,6 +118,8 @@ async def search_outbound_flights(origin: str, destination: str, depart_date: st
                     arrival_city=destination,
                     departure_time=data['dep_time'],
                     arrival_time=data['arr_time'],
+                    duration=data['duration'], # <--- ADDED
+                    stops=data['stops'],       # <--- ADDED
                     price=data['price'],
                     booking_link=page.url 
                 )
@@ -179,8 +203,10 @@ async def search_return_flights(search_url: str, outbound_airline: str, outbound
                     arrival_city="Origin",
                     departure_time=data['dep_time'],
                     arrival_time=data['arr_time'],
+                    duration=data['duration'], 
+                    stops=data['stops'],     
                     price=data['price'], 
-                    booking_link=page.url # Note: This URL is now ready for Tool 3
+                    booking_link=page.url 
                 )
                 results.append(flight)
                 
@@ -193,19 +219,17 @@ async def search_return_flights(search_url: str, outbound_airline: str, outbound
     return results
 
 # ------------------------------------------------------------------
-# TOOL 3: FINAL BOOKING LINK (The "Deep Link" Generator)
+# TOOL 3: FINAL BOOKING LINK
 # ------------------------------------------------------------------
 @tool
 async def generate_booking_link(search_url: str, return_airline: str, return_departure_time: str, return_price: float) -> str:
     """
     Step 3: FINAL STEP. Selects the return flight and extracts the final booking URL.
-    This URL will contain BOTH flights and allow the user to checkout.
     """
     print(f"✈️  Tool 3: Generating Final Booking Link...")
     
     target_airline = normalize_text(return_airline)
     target_dep = normalize_text(return_departure_time)
-    
     final_url = "Error: Could not generate link"
 
     async with async_playwright() as p:
@@ -214,11 +238,9 @@ async def generate_booking_link(search_url: str, return_airline: str, return_dep
         page = await context.new_page()
         
         try:
-            # 1. Go to the page where Outbound is already selected (provided by Tool 2)
             await page.goto(search_url, timeout=Config.TIMEOUT)
             await page.wait_for_selector('div[role="main"]', state="visible", timeout=15000)
             
-            # 2. Find the Return Flight
             cards = await page.locator('div[role="main"] li').all()
             target_card = None
             
@@ -229,7 +251,6 @@ async def generate_booking_link(search_url: str, return_airline: str, return_dep
                 card_airline = normalize_text(data['airline'])
                 card_dep = normalize_text(data['dep_time'])
                 
-                # We use looser matching here because prices fluctuate slightly when combined
                 airline_match = (target_airline in card_airline) or (card_airline in target_airline)
                 time_match = (target_dep == card_dep)
                 
@@ -239,7 +260,6 @@ async def generate_booking_link(search_url: str, return_airline: str, return_dep
             
             if target_card:
                 await target_card.click()
-                # Wait for the URL to update to the "Review" page
                 await page.wait_for_timeout(5000) 
                 final_url = page.url
                 print(f"✅ SUCCESS! Final Deep Link Generated.")
