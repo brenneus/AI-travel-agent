@@ -8,26 +8,26 @@ RETURN OPTION #1
    💰 Total Price: $813.0
    ⏰ Depart:      8:59 PM
    🛬 Arrive:      11:48 PM
-   🔗 Booking URL: https://www.google.com/travel/flights/search?tfs=CBwQAho_EgoyMDI2LTAyLTEyIh8KA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJCNjIDMTYzagcIARIDSkZLcgcIARIDU1JRGh4SCjIwMjYtMDItMTZqBwgBEgNTUlFyBwgBEgNKRktAAUgBcAGCAQsI____________AZgBAQ&tfu=CmxDalJJTUhwYWQxbEdjVlpFTVRoQlFVdzRiMmRDUnkwdExTMHRMUzB0TFMxMmRIWnlNMEZCUVVGQlIyMURXR3hyVDJOSk9WZEJFZ1ZDTmpFMk14b0xDSXY3QkJBQ0dnTlZVMFE0SFhDTCt3UT0SAggAIgMSATA
+   🔗 Booking URL: https://www.google.com/travel/flights/search?tfs=CBwQAho_EgoyMDI2LTAyLTEyIh8KA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJCNjIDMTYzagcIARIDSkZLcgcIARIDU1JRGh4SCjIwMjYtMDItMTZqBwgBEgNTUlFyBwgBEgNKRktAAUgBcAGCAQsI____________AZgBAQ&tfu=CmxDalJJVGtoa1dsVnZhazVLWm10QlF6aEtZbEZDUnkwdExTMHRMUzB0TFhaMGNuY3hPVUZCUVVGQlIyMUVhMEU0VDJsblVIZEJFZ1ZDTmpFMk14b0xDSXY3QkJBQ0dnTlZVMFE0SFhDTCt3UT0SAggAIgA
 ------------------------------------------------------------
 RETURN OPTION #2
-   ✈️  Airline:     Delta
-   💰 Total Price: $1012.0
-   ⏰ Depart:      5:44 PM
-   🛬 Arrive:      8:35 PM
-   🔗 Booking URL: https://www.google.com/travel/flights/search?tfs=CBwQAho_EgoyMDI2LTAyLTEyIh8KA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJCNjIDMTYzagcIARIDSkZLcgcIARIDU1JRGh4SCjIwMjYtMDItMTZqBwgBEgNTUlFyBwgBEgNKRktAAUgBcAGCAQsI____________AZgBAQ&tfu=CmxDalJJTUhwYWQxbEdjVlpFTVRoQlFVdzRiMmRDUnkwdExTMHRMUzB0TFMxMmRIWnlNMEZCUVVGQlIyMURXR3hyVDJOSk9WZEJFZ1ZDTmpFMk14b0xDSXY3QkJBQ0dnTlZVMFE0SFhDTCt3UT0SAggAIgMSATA
-------------------------------------------------------------
-RETURN OPTION #3
    ✈️  Airline:     JetBlue
    💰 Total Price: $1056.0
    ⏰ Depart:      10:54 AM
    🛬 Arrive:      6:27 PM
-   🔗 Booking URL: https://www.google.com/travel/flights/search?tfs=CBwQAho_EgoyMDI2LTAyLTEyIh8KA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJCNjIDMTYzagcIARIDSkZLcgcIARIDU1JRGh4SCjIwMjYtMDItMTZqBwgBEgNTUlFyBwgBEgNKRktAAUgBcAGCAQsI____________AZgBAQ&tfu=CmxDalJJTUhwYWQxbEdjVlpFTVRoQlFVdzRiMmRDUnkwdExTMHRMUzB0TFMxMmRIWnlNMEZCUVVGQlIyMURXR3hyVDJOSk9WZEJFZ1ZDTmpFMk14b0xDSXY3QkJBQ0dnTlZVMFE0SFhDTCt3UT0SAggAIgMSATA
+   🔗 Booking URL: https://www.google.com/travel/flights/search?tfs=CBwQAho_EgoyMDI2LTAyLTEyIh8KA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJCNjIDMTYzagcIARIDSkZLcgcIARIDU1JRGh4SCjIwMjYtMDItMTZqBwgBEgNTUlFyBwgBEgNKRktAAUgBcAGCAQsI____________AZgBAQ&tfu=CmxDalJJVGtoa1dsVnZhazVLWm10QlF6aEtZbEZDUnkwdExTMHRMUzB0TFhaMGNuY3hPVUZCUVVGQlIyMUVhMEU0VDJsblVIZEJFZ1ZDTmpFMk14b0xDSXY3QkJBQ0dnTlZVMFE0SFhDTCt3UT0SAggAIgA
+------------------------------------------------------------
+RETURN OPTION #3
+   ✈️  Airline:     Delta
+   💰 Total Price: $1112.0
+   ⏰ Depart:      5:44 PM
+   🛬 Arrive:      8:35 PM
+   🔗 Booking URL: https://www.google.com/travel/flights/search?tfs=CBwQAho_EgoyMDI2LTAyLTEyIh8KA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJCNjIDMTYzagcIARIDSkZLcgcIARIDU1JRGh4SCjIwMjYtMDItMTZqBwgBEgNTUlFyBwgBEgNKRktAAUgBcAGCAQsI____________AZgBAQ&tfu=CmxDalJJVGtoa1dsVnZhazVLWm10QlF6aEtZbEZDUnkwdExTMHRMUzB0TFhaMGNuY3hPVUZCUVVGQlIyMUVhMEU0VDJsblVIZEJFZ1ZDTmpFMk14b0xDSXY3QkJBQ0dnTlZVMFE0SFhDTCt3UT0SAggAIgA
 ------------------------------------------------------------
 RETURN OPTION #4
    ✈️  Airline:     JetBlue
    💰 Total Price: $1159.0
    ⏰ Depart:      5:10 PM
    🛬 Arrive:      8:04 PM
-   🔗 Booking URL: https://www.google.com/travel/flights/search?tfs=CBwQAho_EgoyMDI2LTAyLTEyIh8KA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJCNjIDMTYzagcIARIDSkZLcgcIARIDU1JRGh4SCjIwMjYtMDItMTZqBwgBEgNTUlFyBwgBEgNKRktAAUgBcAGCAQsI____________AZgBAQ&tfu=CmxDalJJTUhwYWQxbEdjVlpFTVRoQlFVdzRiMmRDUnkwdExTMHRMUzB0TFMxMmRIWnlNMEZCUVVGQlIyMURXR3hyVDJOSk9WZEJFZ1ZDTmpFMk14b0xDSXY3QkJBQ0dnTlZVMFE0SFhDTCt3UT0SAggAIgMSATA
+   🔗 Booking URL: https://www.google.com/travel/flights/search?tfs=CBwQAho_EgoyMDI2LTAyLTEyIh8KA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJCNjIDMTYzagcIARIDSkZLcgcIARIDU1JRGh4SCjIwMjYtMDItMTZqBwgBEgNTUlFyBwgBEgNKRktAAUgBcAGCAQsI____________AZgBAQ&tfu=CmxDalJJVGtoa1dsVnZhazVLWm10QlF6aEtZbEZDUnkwdExTMHRMUzB0TFhaMGNuY3hPVUZCUVVGQlIyMUVhMEU0VDJsblVIZEJFZ1ZDTmpFMk14b0xDSXY3QkJBQ0dnTlZVMFE0SFhDTCt3UT0SAggAIgA
 ------------------------------------------------------------
