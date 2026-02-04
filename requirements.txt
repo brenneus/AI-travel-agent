@@ -1,18 +1,25 @@
 # --- Core Framework ---
 langchain>=0.3.0
 langgraph>=0.2.0
-langchain-community     # Needed for generic tools and helpers
+langchain-community
+langchain-core
 
 # --- The Brain (Models) ---
-langchain-google-genai     # Specifically for Claude 3.5 Sonnet
+langchain-google-genai     # For Google Gemini 3 Flash
+google-generativeai        # Underlying Google SDK
 
 # --- The Hands (Browser Automation) ---
 playwright              # The engine that controls the browser
-beautifulsoup4          # For cleaning up messy HTML before sending to AI
+beautifulsoup4          # For cleaning up messy HTML
+aiohttp>=3.9.0          # CRITICAL: Fixes the 'ClientConnectorDNSError'
 
 # --- Data & Configuration ---
 pydantic                # For the strict 'State' definitions
 python-dotenv           # To load your API keys from .env
 
-# --- Development & Testing ---
-jupyter                 # To run your testing notebooks
+# --- API Server (Phase 2) ---
+fastapi                 # The Web Server
+uvicorn                 # The Server Runner
+
+# --- Development ---
+jupyter                 # For testing notebooks

@@ -1,4 +1,5 @@
 import operator
+import asyncio
 from typing import Annotated, List, Literal, Union
 
 # 1. Load Environment Variables
@@ -34,6 +35,7 @@ llm_with_tools = llm.bind_tools(tools)
 
 SYSTEM_PROMPT = """You are an intelligent Flight Planning Agent.
 Your goal is to plan a complete round-trip itinerary for the user.
+Remember the current year is 2026. 
 
 **PHASE 1: CLARIFICATION (The "Pre-Flight Check")**
 Before searching, you must ensure you have precise data.
@@ -76,29 +78,26 @@ Once you have the data, execute the workflow without stopping.
 """
 
 # ------------------------------------------------------------------
-# 5. DEFINE THE NODES
+# 5. DEFINE THE NODES (FIXED: NOW ASYNC)
 # ------------------------------------------------------------------
 
-def chatbot_node(state: AgentState):
+# !!! FIX 1: Must be 'async def' to support async tools !!!
+async def chatbot_node(state: AgentState):
     """
     The central node. It looks at the conversation history and decides what to do next.
     """
     messages = [SystemMessage(content=SYSTEM_PROMPT)] + state["messages"]
-    result = llm_with_tools.invoke(messages)
+    
+    # !!! FIX 2: Must use 'await' and '.ainvoke' !!!
+    result = await llm_with_tools.ainvoke(messages)
+    
     return {"messages": [result]}
 
 def should_continue(state: AgentState) -> Literal["tools", "__end__"]:
-    """
-    Decides the next step based on the LLM's last message.
-    """
     messages = state["messages"]
     last_message = messages[-1]
-
-    # If the LLM wants to use a tool, route there
     if last_message.tool_calls:
         return "tools"
-    
-    # Otherwise, stop and wait for the user
     return "__end__"
 
 # ------------------------------------------------------------------
@@ -119,10 +118,10 @@ def create_agent():
     return workflow.compile()
 
 # ------------------------------------------------------------------
-# 7. RUNNER (Test Loop)
+# 7. RUNNER (FIXED: NOW ASYNC STREAM)
 # ------------------------------------------------------------------
 
-if __name__ == "__main__":
+async def main():
     print(f"🤖 Flight Architect Initialized ({Config.MODEL_NAME}). Type 'q' to quit.")
     
     agent = create_agent()
@@ -141,21 +140,36 @@ if __name__ == "__main__":
         print("   (Thinking...)")
         
         try:
-            events = agent.stream(initial_state, stream_mode="values")
-            
-            for event in events:
+            # !!! FIX 3: Must use 'async for' and '.astream' !!!
+            async for event in agent.astream(initial_state, stream_mode="values"):
+                
                 if "messages" in event:
                     last_msg = event["messages"][-1]
                     
+                    # LOGGING
                     if isinstance(last_msg, AIMessage) and last_msg.tool_calls:
                         print(f"   ⚙️  Action: {last_msg.tool_calls[0]['name']}")
-                        # Debug: Print arguments to verify data structure
                         print(f"       Args: {last_msg.tool_calls[0]['args']}")
+                    
                     elif last_msg.type == "tool":
-                        print(f"   ✅ Data Received.")
+                        print(f"   ✅ Tool Data Received.")
+                    
                     elif isinstance(last_msg, AIMessage) and not last_msg.tool_calls:
-                        print(f"🤖 Agent: {last_msg.content}")
+                        content = last_msg.content
+                        final_text = ""
+                        
+                        if isinstance(content, list):
+                            for block in content:
+                                if isinstance(block, dict) and "text" in block:
+                                    final_text += block["text"]
+                        else:
+                            final_text = str(content)
+                            
+                        print(f"🤖 Agent: {final_text}")
                         chat_history = event["messages"]
                         
         except Exception as e:
             print(f"❌ Error: {e}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
