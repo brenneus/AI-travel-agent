@@ -13,21 +13,24 @@ Config.HEADLESS = False
 
 async def run_return_test():
     print("🧪 Starting RETURN Flight Search Test (Strict Match)...")
-    print("   Goal: Find and Click the exact 'JetBlue' flight using 4 data points.")
+    print("   Goal: Find and Click the exact 'JetBlue' flight using 5 data points.")
 
     # --- MOCK INPUTS (Matching your Option #2) ---
     mock_search_url = "https://www.google.com/travel/flights?q=Flights+from+JFK+to+SRQ+on+2026-02-12+returning+2026-02-16"
+    
     # These must match Option #2 EXACTLY
     mock_airline = "JetBlue"
-    mock_dep_time = "12:59 PM"
-    mock_arr_time = "4:14 PM"
+    mock_dep_time = "4:52 PM"  # Updated time
+    mock_arr_time = "8:07 PM"  # Updated time
     mock_price = 813.0
+    mock_stops = "Nonstop"    # Updated stops (Note: scraper usually normalizes "Nonstop" to "Non-stop" or vice versa)
 
     print(f"   🎯 Target Fingerprint:")
     print(f"      - Airline: {mock_airline}")
     print(f"      - Depart:  {mock_dep_time}")
     print(f"      - Arrive:  {mock_arr_time}")
     print(f"      - Price:   ${mock_price}")
+    print(f"      - Stops:   {mock_stops}")
     
     # Run Tool 2
     results = await search_return_flights.ainvoke({
@@ -35,7 +38,8 @@ async def run_return_test():
         "outbound_airline": mock_airline,
         "outbound_departure_time": mock_dep_time,
         "outbound_arrival_time": mock_arr_time,
-        "outbound_price": mock_price
+        "outbound_price": mock_price,
+        "outbound_stops": mock_stops  # <--- NEW PARAMETER
     })
     
     print(f"\n✅ Test Complete! Scraper returned {len(results)} return options.")
@@ -47,7 +51,7 @@ async def run_return_test():
         
         with open(output_filename, "w", encoding="utf-8") as f:
             f.write(f"--- RETURN SEARCH RESULTS ---\n")
-            f.write(f"Based on Outbound: {mock_airline} ({mock_dep_time} - {mock_arr_time})\n")
+            f.write(f"Based on Outbound: {mock_airline} ({mock_dep_time} - {mock_arr_time}, {mock_stops})\n")
             f.write(f"Total Options Found: {len(results)}\n")
             f.write("=" * 60 + "\n\n")
             
@@ -57,6 +61,10 @@ async def run_return_test():
                 f.write(f"   💰 Total Price: ${flight.price}\n")
                 f.write(f"   ⏰ Depart:      {flight.departure_time}\n")
                 f.write(f"   🛬 Arrive:      {flight.arrival_time}\n")
+                # --- NEW FIELDS ---
+                f.write(f"   ⏱️  Duration:    {flight.duration}\n")
+                f.write(f"   🛑 Stops:       {flight.stops}\n")
+                # ------------------
                 f.write(f"   🔗 Booking URL: {flight.booking_link}\n")
                 f.write("-" * 60 + "\n")
                 

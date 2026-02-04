@@ -1,5 +1,5 @@
 --- RETURN SEARCH RESULTS ---
-Based on Outbound: JetBlue (12:59 PM - 4:14 PM)
+Based on Outbound: JetBlue (4:52 PM - 8:07 PM, Nonstop)
 Total Options Found: 4
 ============================================================
 
@@ -8,26 +8,34 @@ RETURN OPTION #1
    💰 Total Price: $813.0
    ⏰ Depart:      8:59 PM
    🛬 Arrive:      11:48 PM
-   🔗 Booking URL: https://www.google.com/travel/flights/search?tfs=CBwQAho_EgoyMDI2LTAyLTEyIh8KA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJCNjIDMTYzagcIARIDSkZLcgcIARIDU1JRGh4SCjIwMjYtMDItMTZqBwgBEgNTUlFyBwgBEgNKRktAAUgBcAGCAQsI____________AZgBAQ&tfu=CmxDalJJVGtoa1dsVnZhazVLWm10QlF6aEtZbEZDUnkwdExTMHRMUzB0TFhaMGNuY3hPVUZCUVVGQlIyMUVhMEU0VDJsblVIZEJFZ1ZDTmpFMk14b0xDSXY3QkJBQ0dnTlZVMFE0SFhDTCt3UT0SAggAIgA
+   ⏱️  Duration:    2 hr 49 min
+   🛑 Stops:       Nonstop
+   🔗 Booking URL: https://www.google.com/travel/flights/search?tfs=CBwQAho_EgoyMDI2LTAyLTEyIh8KA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJCNjIDNDYzagcIARIDSkZLcgcIARIDU1JRGh4SCjIwMjYtMDItMTZqBwgBEgNTUlFyBwgBEgNKRktAAUgBcAGCAQsI____________AZgBAQ&tfu=CmxDalJJZEROS2FIWlhiMWRNTWpCQlFWaGhSVkZDUnkwdExTMHRMUzB0TFMxMmQzZGpPRUZCUVVGQlIyMUVlbEUwU1cxRk9VMUJFZ1ZDTmpRMk14b0xDSXY3QkJBQ0dnTlZVMFE0SFhDTCt3UT0SAggAIgMKATA
 ------------------------------------------------------------
 RETURN OPTION #2
    ✈️  Airline:     JetBlue
    💰 Total Price: $1056.0
    ⏰ Depart:      10:54 AM
    🛬 Arrive:      6:27 PM
-   🔗 Booking URL: https://www.google.com/travel/flights/search?tfs=CBwQAho_EgoyMDI2LTAyLTEyIh8KA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJCNjIDMTYzagcIARIDSkZLcgcIARIDU1JRGh4SCjIwMjYtMDItMTZqBwgBEgNTUlFyBwgBEgNKRktAAUgBcAGCAQsI____________AZgBAQ&tfu=CmxDalJJVGtoa1dsVnZhazVLWm10QlF6aEtZbEZDUnkwdExTMHRMUzB0TFhaMGNuY3hPVUZCUVVGQlIyMUVhMEU0VDJsblVIZEJFZ1ZDTmpFMk14b0xDSXY3QkJBQ0dnTlZVMFE0SFhDTCt3UT0SAggAIgA
+   ⏱️  Duration:    7 hr 33 min
+   🛑 Stops:       1 Stop(s)
+   🔗 Booking URL: https://www.google.com/travel/flights/search?tfs=CBwQAho_EgoyMDI2LTAyLTEyIh8KA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJCNjIDNDYzagcIARIDSkZLcgcIARIDU1JRGh4SCjIwMjYtMDItMTZqBwgBEgNTUlFyBwgBEgNKRktAAUgBcAGCAQsI____________AZgBAQ&tfu=CmxDalJJZEROS2FIWlhiMWRNTWpCQlFWaGhSVkZDUnkwdExTMHRMUzB0TFMxMmQzZGpPRUZCUVVGQlIyMUVlbEUwU1cxRk9VMUJFZ1ZDTmpRMk14b0xDSXY3QkJBQ0dnTlZVMFE0SFhDTCt3UT0SAggAIgMKATA
 ------------------------------------------------------------
 RETURN OPTION #3
    ✈️  Airline:     Delta
    💰 Total Price: $1112.0
    ⏰ Depart:      5:44 PM
    🛬 Arrive:      8:35 PM
-   🔗 Booking URL: https://www.google.com/travel/flights/search?tfs=CBwQAho_EgoyMDI2LTAyLTEyIh8KA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJCNjIDMTYzagcIARIDSkZLcgcIARIDU1JRGh4SCjIwMjYtMDItMTZqBwgBEgNTUlFyBwgBEgNKRktAAUgBcAGCAQsI____________AZgBAQ&tfu=CmxDalJJVGtoa1dsVnZhazVLWm10QlF6aEtZbEZDUnkwdExTMHRMUzB0TFhaMGNuY3hPVUZCUVVGQlIyMUVhMEU0VDJsblVIZEJFZ1ZDTmpFMk14b0xDSXY3QkJBQ0dnTlZVMFE0SFhDTCt3UT0SAggAIgA
+   ⏱️  Duration:    2 hr 51 min
+   🛑 Stops:       Nonstop
+   🔗 Booking URL: https://www.google.com/travel/flights/search?tfs=CBwQAho_EgoyMDI2LTAyLTEyIh8KA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJCNjIDNDYzagcIARIDSkZLcgcIARIDU1JRGh4SCjIwMjYtMDItMTZqBwgBEgNTUlFyBwgBEgNKRktAAUgBcAGCAQsI____________AZgBAQ&tfu=CmxDalJJZEROS2FIWlhiMWRNTWpCQlFWaGhSVkZDUnkwdExTMHRMUzB0TFMxMmQzZGpPRUZCUVVGQlIyMUVlbEUwU1cxRk9VMUJFZ1ZDTmpRMk14b0xDSXY3QkJBQ0dnTlZVMFE0SFhDTCt3UT0SAggAIgMKATA
 ------------------------------------------------------------
 RETURN OPTION #4
    ✈️  Airline:     JetBlue
    💰 Total Price: $1159.0
    ⏰ Depart:      5:10 PM
    🛬 Arrive:      8:04 PM
-   🔗 Booking URL: https://www.google.com/travel/flights/search?tfs=CBwQAho_EgoyMDI2LTAyLTEyIh8KA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJCNjIDMTYzagcIARIDSkZLcgcIARIDU1JRGh4SCjIwMjYtMDItMTZqBwgBEgNTUlFyBwgBEgNKRktAAUgBcAGCAQsI____________AZgBAQ&tfu=CmxDalJJVGtoa1dsVnZhazVLWm10QlF6aEtZbEZDUnkwdExTMHRMUzB0TFhaMGNuY3hPVUZCUVVGQlIyMUVhMEU0VDJsblVIZEJFZ1ZDTmpFMk14b0xDSXY3QkJBQ0dnTlZVMFE0SFhDTCt3UT0SAggAIgA
+   ⏱️  Duration:    2 hr 54 min
+   🛑 Stops:       Nonstop
+   🔗 Booking URL: https://www.google.com/travel/flights/search?tfs=CBwQAho_EgoyMDI2LTAyLTEyIh8KA0pGSxIKMjAyNi0wMi0xMhoDU1JRKgJCNjIDNDYzagcIARIDSkZLcgcIARIDU1JRGh4SCjIwMjYtMDItMTZqBwgBEgNTUlFyBwgBEgNKRktAAUgBcAGCAQsI____________AZgBAQ&tfu=CmxDalJJZEROS2FIWlhiMWRNTWpCQlFWaGhSVkZDUnkwdExTMHRMUzB0TFMxMmQzZGpPRUZCUVVGQlIyMUVlbEUwU1cxRk9VMUJFZ1ZDTmpRMk14b0xDSXY3QkJBQ0dnTlZVMFE0SFhDTCt3UT0SAggAIgMKATA
 ------------------------------------------------------------

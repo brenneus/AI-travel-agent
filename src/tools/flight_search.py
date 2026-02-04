@@ -136,18 +136,28 @@ async def search_outbound_flights(origin: str, destination: str, depart_date: st
 # TOOL 2: SMART RETURN SEARCH
 # ------------------------------------------------------------------
 @tool
-async def search_return_flights(search_url: str, outbound_airline: str, outbound_departure_time: str, outbound_arrival_time: str, outbound_price: float) -> List[FlightOption]:
+async def search_return_flights(
+    search_url: str, 
+    outbound_airline: str, 
+    outbound_departure_time: str, 
+    outbound_arrival_time: str, 
+    outbound_price: float,
+    outbound_stops: str # <--- Added as required parameter
+) -> List[FlightOption]:
     """
-    Step 2: Search for RETURN flights. Requires strict matching of the outbound flight.
+    Step 2: Search for RETURN flights. 
+    Requires STRICT matching of Airline, Time, Price, AND Stops to ensure we click the right flight.
     """
-    print(f"✈️  Tool 2: Re-locating Outbound Flight...")
+    print(f"✈️  Tool 2: Re-locating Outbound Flight (Strict Match)...")
     
     results = []
     seen_ids: Set[str] = set()
     
+    # Target Fingerprint
     target_airline = normalize_text(outbound_airline)
     target_dep = normalize_text(outbound_departure_time)
     target_arr = normalize_text(outbound_arrival_time)
+    target_stops = normalize_text(outbound_stops)
     
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=Config.HEADLESS, args=["--disable-blink-features=AutomationControlled"])
@@ -166,20 +176,26 @@ async def search_return_flights(search_url: str, outbound_airline: str, outbound
                 data = await _extract_card_data(card)
                 if not data: continue
                 
+                # Card Fingerprint
                 card_airline = normalize_text(data['airline'])
                 card_dep = normalize_text(data['dep_time'])
                 card_arr = normalize_text(data['arr_time'])
+                card_stops = normalize_text(data['stops'])
                 
+                # 1. Check Matches
                 airline_match = (target_airline in card_airline) or (card_airline in target_airline)
                 time_match = (target_dep == card_dep) and (target_arr == card_arr)
-                price_match = abs(data['price'] - outbound_price) < 2.0
+                stops_match = (target_stops == card_stops)
+                price_match = abs(data['price'] - outbound_price) < 2.0 # Strict price check
 
-                if airline_match and time_match and price_match:
+                # 2. Strict Decision
+                if airline_match and time_match and stops_match and price_match:
                     target_card = card
+                    print(f"   🎯 MATCH FOUND: {data['airline']} {data['dep_time']} (${data['price']})")
                     break
             
             if not target_card:
-                print(f"❌ Critical: Could not re-locate outbound flight.")
+                print(f"❌ Critical: Could not re-locate outbound flight. Matches failed.")
                 return []
             
             await target_card.click()
