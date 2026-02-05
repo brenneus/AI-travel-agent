@@ -13,7 +13,7 @@ from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 
 # 2. Import Custom Components
 from src.state import AgentState
-from src.tools.flight_search import search_outbound_flights, search_return_flights
+from src.tools.flight_search import search_outbound_flights, search_return_flights, generate_booking_link
 from src.config import Config
 
 # ------------------------------------------------------------------
@@ -26,7 +26,7 @@ llm = ChatGoogleGenerativeAI(
     max_retries=2,
 )
 
-tools = [search_outbound_flights, search_return_flights]
+tools = [search_outbound_flights, search_return_flights, generate_booking_link]
 llm_with_tools = llm.bind_tools(tools)
 
 # ------------------------------------------------------------------
@@ -39,13 +39,15 @@ Remember the current year is 2026.
 
 **PHASE 1: CLARIFICATION (The "Pre-Flight Check")**
 Before searching, you must ensure you have precise data.
-Analyze the user's request for these 4 keys. If any are missing or vague, ASK.
+Analyze the user's request for these keys. If any are missing or vague, ASK.
 
-1.  **Airports:** * Convert cities to Airport Codes (e.g., "New York" -> JFK, LGA, or EWR).
+1.  **Dates**: Exact Depart and Return dates (e.g., "2026-02-12" and "2026-02-16").
+2.  **Airports:** * Convert cities to Airport Codes (e.g., "New York" -> JFK, LGA, or EWR).
     * *CRITICAL:* If a city has multiple airports (NY, London, DC, Tokyo, etc.), ASK the user if they have a preference or if "Any" is okay. 
-2.  **Stops:** (Non-stop vs. Any)
-3.  **Airline:** (Specific vs. No preference)
-4.  **Timing:** (Morning/Afternoon/Night vs. Anytime)
+3.  **Stops:** (Non-stop vs. Any)
+4.  **Airline:** (Specific vs. No preference)
+5.  **Timing:** (Morning/Afternoon/Night vs. Anytime)
+6.  **Budget:** (Max price, "Cheapest Option", or "No limit")
 
 **PHASE 2: AUTONOMOUS EXECUTION (Strict Tool usage)**
 Once you have the data, execute the workflow without stopping.
@@ -60,8 +62,12 @@ Once you have the data, execute the workflow without stopping.
 
 **Step 2: Autonomous Selection**
 * Review the results from Step 1.
+* **Apply Budget Logic:**
+    * If "Max Price" is set: DISCARD any flight over the limit. If no flights remain, let the user know and ask to adjust their budget.
+    * If "Cheapest Option": Non-stop > Price, but the cheapest non-stop flight wins. If no non-stop flights, pick the cheapest overall. 
+    * If "No limit": Prioritize Non-stop > Airline Preference > Price
 * Pick the **single best flight** matching the User's Phase 1 preferences.
-* *Tie-breaker:* Cheapest price wins.
+* Make sure to note the `booking_link` from this flight for Step 3.
 
 **Step 3: Search Return (The Handshake)**
 * Call `search_return_flights`.
@@ -71,24 +77,43 @@ Once you have the data, execute the workflow without stopping.
     * `outbound_departure_time`: Exact string (e.g. "12:59 PM").
     * `outbound_arrival_time`: Exact string.
     * `outbound_price`: Exact float (e.g., 813.0).
+    * `outbound_stops`: Exact string (e.g., "Nonstop").
 
-**Step 4: Finalize**
-* Select the best matching return flight.
-* Present the final itinerary with Total Price and a link.
+**Step 4: Autonomous Return Selection**
+* Review the results from Step 3.
+* **Apply Budget Logic:**
+    * If "Max Price" is set: DISCARD any flight over the limit. If no flights remain, let the user know and ask to adjust their budget.
+    * If "Cheapest Option": Non-stop > Price, but the cheapest non-stop flight wins. If no non-stop flights, pick the cheapest overall. 
+    * If "No limit": Prioritize Non-stop > Airline Preference > Price
+* Pick the **single best return flight** matching the User's Phase 1 preferences.
+* Make sure to note the `booking_link` from this flight for Step 5.
+
+**Step 5: Generate Booking Link (The Final Lock)**
+* Review the results from Step 3 and select the best return flight.
+* Call `generate_booking_link`.
+* **CRITICAL:** Pass the EXACT values from the chosen return flight:
+    * `search_url`: The `booking_link` returned in Step 3.
+    * `return_airline`: Exact airline name.
+    * `return_departure_time`: Exact string.
+    * `return_arrival_time`: Exact string.
+    * `return_price`: Exact float.
+    * `return_stops`: Exact string.
+
+**Step 6: Final Output**
+* Present the final itinerary to the user.
+* **You MUST include the 'Deep Link' returned by Step 5.**
+* Example: "I have booked your trip! Outbound: Delta ($200). Return: Delta ($200). [Click Here to Book](<Deep_Link_URL>)"
 """
 
 # ------------------------------------------------------------------
 # 5. DEFINE THE NODES (FIXED: NOW ASYNC)
 # ------------------------------------------------------------------
 
-# !!! FIX 1: Must be 'async def' to support async tools !!!
 async def chatbot_node(state: AgentState):
     """
     The central node. It looks at the conversation history and decides what to do next.
     """
     messages = [SystemMessage(content=SYSTEM_PROMPT)] + state["messages"]
-    
-    # !!! FIX 2: Must use 'await' and '.ainvoke' !!!
     result = await llm_with_tools.ainvoke(messages)
     
     return {"messages": [result]}
@@ -140,7 +165,6 @@ async def main():
         print("   (Thinking...)")
         
         try:
-            # !!! FIX 3: Must use 'async for' and '.astream' !!!
             async for event in agent.astream(initial_state, stream_mode="values"):
                 
                 if "messages" in event:
