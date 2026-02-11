@@ -26,8 +26,7 @@ These instructions will get you a copy of the project up and running on your loc
 *   Node.js 18.x or later
 *   `pip` for Python package management
 *   `npm` or `yarn` for Node.js package management
-*   Google AI Studio API Key
-
+*   Google AI Studio API Key (available [here](https://aistudio.google.com) for free)
 ### Installation
 
 1.  **Clone the repository:**

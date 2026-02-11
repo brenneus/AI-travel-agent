@@ -20,6 +20,7 @@ This directory contains the backend for the AI Travel Agent. It is a Python-base
 
 2.  **Create `.env` file:**
     Create a `.env` file in this directory and add the necessary API keys. You can use `.env.example` as a template.
+    A Google AI Studio API KEY available [here](https://aistudio.google.com) for free. 
 
 ### Testing the agent locally
 
