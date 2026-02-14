@@ -35,7 +35,6 @@ async def chat_endpoint(request: ChatRequest):
             initial_state = {"messages": [user_msg]}
             config = {"configurable": {"thread_id": request.thread_id}}
             
-            # This is the exact same loop from your CLI!
             async for event in compiled_graph.astream(initial_state, config, stream_mode="values"):
                 if "messages" in event:
                     last_msg = event["messages"][-1]
