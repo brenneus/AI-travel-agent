@@ -142,14 +142,15 @@ def create_agent():
 
     return workflow.compile()
 
+compiled_graph = create_agent()
+
 # ------------------------------------------------------------------
-# 7. RUNNER (FIXED: NOW ASYNC STREAM)
+# 7. RUNNER (CLI MODE)
 # ------------------------------------------------------------------
 
 async def main():
-    print(f"🤖 Flight Architect Initialized ({Config.MODEL_NAME}). Type 'q' to quit.")
+    print(f"🤖 Flight Architect Initialized. Type 'q' to quit.")
     
-    agent = create_agent()
     chat_history = []
     
     while True:
@@ -165,7 +166,7 @@ async def main():
         print("   (Thinking...)")
         
         try:
-            async for event in agent.astream(initial_state, stream_mode="values"):
+            async for event in compiled_graph.astream(initial_state, stream_mode="values"):
                 
                 if "messages" in event:
                     last_msg = event["messages"][-1]
