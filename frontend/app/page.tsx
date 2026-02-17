@@ -11,7 +11,13 @@ type Message = {
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
+  const [threadId, setThreadId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    // On component mount, generate a unique thread ID for the session
+    setThreadId(crypto.randomUUID());
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -22,7 +28,7 @@ export default function Home() {
   }, [messages]);
 
   const handleSendMessage = async () => {
-    if (input.trim() === '') return;
+    if (input.trim() === '' || !threadId) return;
 
     const userMessage: Message = { type: 'user', content: input };
     setMessages((prev) => [...prev, userMessage]);
@@ -32,7 +38,7 @@ export default function Home() {
       const response = await fetch('http://localhost:8000/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: input }),
+        body: JSON.stringify({ message: input, thread_id: threadId }),
       });
 
       if (!response.body) return;

@@ -1,38 +1,33 @@
-import operator
+import operator 
 import asyncio
 from typing import Annotated, List, Literal, Union
 
 # 1. Load Environment Variables
 from dotenv import load_dotenv
-load_dotenv() 
+load_dotenv()
 
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langgraph.graph import StateGraph, END
+from langgraph.checkpoint.memory import MemorySaver
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langgraph.prebuilt import ToolNode
-from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
-
+from langgraph.graph import END, StateGraph
+from langchain_google_genai import ChatGoogleGenerativeAI
 # 2. Import Custom Components
-from src.state import AgentState
-from src.tools.flight_search import search_outbound_flights, search_return_flights, generate_booking_link
 from src.config import Config
-
+from src.tools.flight_search import generate_booking_link, search_outbound_flights, search_return_flights
+from src.state import AgentState
 # ------------------------------------------------------------------
 # 3. SETUP THE BRAIN
 # ------------------------------------------------------------------
-
 llm = ChatGoogleGenerativeAI(
-    model=Config.MODEL_NAME, 
-    temperature=0, 
+    model=Config.MODEL_NAME,
+    temperature=0,
     max_retries=2,
 )
-
 tools = [search_outbound_flights, search_return_flights, generate_booking_link]
 llm_with_tools = llm.bind_tools(tools)
-
 # ------------------------------------------------------------------
 # 4. DEFINE THE "ARCHITECT" SYSTEM PROMPT
 # ------------------------------------------------------------------
-
 SYSTEM_PROMPT = """You are an intelligent Flight Planning Agent.
 Your goal is to plan a complete round-trip itinerary for the user.
 Remember the current year is 2026. 
@@ -104,10 +99,10 @@ Once you have the data, execute the workflow without stopping.
 * **You MUST include the 'Deep Link' returned by Step 5.**
 * Example: "I have booked your trip! Outbound: Delta ($200). Return: Delta ($200). [Click Here to Book](<Deep_Link_URL>)"
 """
-
 # ------------------------------------------------------------------
 # 5. DEFINE THE NODES (FIXED: NOW ASYNC)
 # ------------------------------------------------------------------
+
 
 async def chatbot_node(state: AgentState):
     """
@@ -115,8 +110,8 @@ async def chatbot_node(state: AgentState):
     """
     messages = [SystemMessage(content=SYSTEM_PROMPT)] + state["messages"]
     result = await llm_with_tools.ainvoke(messages)
-    
     return {"messages": [result]}
+
 
 def should_continue(state: AgentState) -> Literal["tools", "__end__"]:
     messages = state["messages"]
@@ -129,72 +124,63 @@ def should_continue(state: AgentState) -> Literal["tools", "__end__"]:
 # 6. BUILD THE GRAPH
 # ------------------------------------------------------------------
 
+
 def create_agent():
     workflow = StateGraph(AgentState)
-
     workflow.add_node("agent", chatbot_node)
     tool_node = ToolNode(tools)
     workflow.add_node("tools", tool_node)
-
     workflow.set_entry_point("agent")
     workflow.add_conditional_edges("agent", should_continue)
     workflow.add_edge("tools", "agent")
+    memory = MemorySaver()
+    return workflow.compile(checkpointer=memory)
 
-    return workflow.compile()
 
 compiled_graph = create_agent()
-
 # ------------------------------------------------------------------
 # 7. RUNNER (CLI MODE)
 # ------------------------------------------------------------------
 
+
 async def main():
     print(f"🤖 Flight Architect Initialized. Type 'q' to quit.")
-    
     chat_history = []
-    
     while True:
         user_input = input("\n👤 User: ")
-        if user_input.lower() in ["q", "quit"]: break
-        
+        if user_input.lower() in ["q", "quit"]:
+            break
         chat_history.append(HumanMessage(content=user_input))
-        
         initial_state = {
             "messages": chat_history,
         }
-        
         print("   (Thinking...)")
-        
         try:
             async for event in compiled_graph.astream(initial_state, stream_mode="values"):
-                
                 if "messages" in event:
                     last_msg = event["messages"][-1]
-                    
                     # LOGGING
                     if isinstance(last_msg, AIMessage) and last_msg.tool_calls:
-                        print(f"   ⚙️  Action: {last_msg.tool_calls[0]['name']}")
-                        print(f"       Args: {last_msg.tool_calls[0]['args']}")
-                    
+                        print(
+                            f"   ⚙️  Action: {last_msg.tool_calls[0]['name']}")
+                        print(
+                            f"       Args: {last_msg.tool_calls[0]['args']}")
                     elif last_msg.type == "tool":
                         print(f"   ✅ Tool Data Received.")
-                    
                     elif isinstance(last_msg, AIMessage) and not last_msg.tool_calls:
                         content = last_msg.content
                         final_text = ""
-                        
                         if isinstance(content, list):
                             for block in content:
                                 if isinstance(block, dict) and "text" in block:
                                     final_text += block["text"]
                         else:
                             final_text = str(content)
-                            
                         print(f"🤖 Agent: {final_text}")
                         chat_history = event["messages"]
-                        
         except Exception as e:
             print(f"❌ Error: {e}")
+
 
 if __name__ == "__main__":
     asyncio.run(main())
