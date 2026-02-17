@@ -64,8 +64,8 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-100">
-      <header className="bg-white shadow-md p-4 flex items-center">
+    <div className="flex flex-col h-screen bg-slate-900 text-white">
+      <header className="bg-slate-800 shadow-md p-4 flex items-center">
         <Image src="/globe.svg" alt="Logo" width={40} height={40} />
         <h1 className="text-xl font-semibold ml-2">AI Travel Agent</h1>
       </header>
@@ -83,8 +83,8 @@ export default function Home() {
                 className={`max-w-lg px-4 py-2 rounded-lg ${
                   msg.type === 'user'
                     ? 'bg-blue-500 text-white'
-                    : 'bg-white'
-                } ${msg.type === 'tool' ? 'text-gray-500 italic' : ''}`}
+                    : 'bg-slate-700 text-white'
+                } ${msg.type === 'tool' ? 'text-gray-400 italic' : ''}`}
               >
                 {msg.content}
               </div>
@@ -94,11 +94,11 @@ export default function Home() {
         </div>
       </main>
 
-      <footer className="bg-white border-t p-4">
+      <footer className="bg-slate-800 border-t border-slate-700 p-4">
         <div className="flex items-center">
           <input
             type="text"
-            className="flex-1 border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 bg-slate-700 border-slate-600 rounded-full px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
