@@ -1,84 +1,46 @@
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
+import { useChatContext } from './contexts/ChatContext';
 import Image from 'next/image';
 
-type Message = {
-  type: 'user' | 'agent' | 'tool';
-  content: string;
-};
 
 export default function Home() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const { activeChat, activeChatMessages, sendMessage } = useChatContext();
   const [input, setInput] = useState('');
-  const [threadId, setThreadId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-    // On component mount, generate a unique thread ID for the session
-    setThreadId(crypto.randomUUID());
-  }, []);
-
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [activeChatMessages]);
 
   const handleSendMessage = async () => {
-    if (input.trim() === '' || !threadId) return;
-
-    const userMessage: Message = { type: 'user', content: input };
-    setMessages((prev) => [...prev, userMessage]);
+    if (input.trim() === '' || !activeChat) return;
+    sendMessage(input);
     setInput('');
-
-    try {
-      const response = await fetch('http://localhost:8000/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: input, thread_id: threadId }),
-      });
-
-      if (!response.body) return;
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let done = false;
-
-      while (!done) {
-        const { value, done: readerDone } = await reader.read();
-        done = readerDone;
-        const chunk = decoder.decode(value, { stream: true });
-        
-        const events = chunk.split('\n\n').filter(Boolean);
-        for (const event of events) {
-          if (event.startsWith('data:')) {
-            const data = JSON.parse(event.substring(5));
-            if (data.type === 'message') {
-              setMessages((prev) => [...prev, { type: 'agent', content: data.content }]);
-            } else if (data.type === 'tool') {
-                setMessages((prev) => [...prev, { type: 'tool', content: data.content }]);
-            }
-          }
-        }
-      }
-    } catch (error) {
-      console.error('Failed to send message:', error);
-    }
   };
 
-  return (
-    <div className="flex flex-col h-screen bg-slate-900 text-white">
-      <header className="bg-slate-800 shadow-md p-4 flex items-center">
-        <Image src="/globe.svg" alt="Logo" width={40} height={40} />
-        <h1 className="text-xl font-semibold ml-2">AI Travel Agent</h1>
-      </header>
+  if (!activeChat) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-center">
+        <Image src="/window.svg" alt="AI Travel Agent" width={80} height={80} />
+        <h1 className="text-2xl font-semibold mt-4">AI Travel Agent</h1>
+        <p className="text-slate-400 mt-2">
+          Start a new conversation to plan your next trip.
+        </p>
+      </div>
+    );
+  }
 
-      <main className="flex-1 overflow-y-auto p-4">
+  return (
+    <div className="flex flex-col h-full">
+      <div className="flex-1 overflow-y-auto p-4">
         <div className="space-y-4">
-          {messages.map((msg, index) => (
+          {activeChatMessages.map((msg, index) => (
             <div
               key={index}
               className={`flex ${
@@ -98,9 +60,9 @@ export default function Home() {
           ))}
           <div ref={messagesEndRef} />
         </div>
-      </main>
+      </div>
 
-      <footer className="bg-slate-800 border-t border-slate-700 p-4">
+      <div className="bg-slate-900 border-t border-slate-700 p-4">
         <div className="flex items-center">
           <input
             type="text"
@@ -117,7 +79,8 @@ export default function Home() {
             Send
           </button>
         </div>
-      </footer>
+      </div>
     </div>
   );
 }
+
