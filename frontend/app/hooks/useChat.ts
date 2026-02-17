@@ -14,24 +14,23 @@ type Chat = {
 };
 
 export const useChat = () => {
-  const [chats, setChats] = useState<Chat[]>(() => {
-    if (typeof window === "undefined") {
-      return [];
-    }
-    const storedChats = localStorage.getItem("chats");
-    return storedChats ? JSON.parse(storedChats) : [];
-  });
-
-  const [activeChatId, setActiveChatId] = useState<string | null>(() => {
-    if (typeof window === "undefined") {
-      return null;
-    }
-    const storedActiveChatId = localStorage.getItem("activeChatId");
-    return storedActiveChatId ? JSON.parse(storedActiveChatId) : null;
-  });
+  const [chats, setChats] = useState<Chat[]>([]);
+  const [activeChatId, setActiveChatId] = useState<string | null>(null);
 
   useEffect(() => {
-    // Save state to local storage whenever it changes
+    // Load state from local storage on mount (client-side only)
+    const storedChats = localStorage.getItem("chats");
+    if (storedChats) {
+      setChats(JSON.parse(storedChats));
+    }
+    const storedActiveChatId = localStorage.getItem("activeChatId");
+    if (storedActiveChatId) {
+      setActiveChatId(JSON.parse(storedActiveChatId));
+    }
+  }, []);
+
+  useEffect(() => {
+    // Save state to local storage whenever it changes (client-side only)
     localStorage.setItem("chats", JSON.stringify(chats));
     if (activeChatId) {
       localStorage.setItem("activeChatId", JSON.stringify(activeChatId));
