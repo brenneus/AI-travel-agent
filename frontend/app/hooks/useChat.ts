@@ -110,6 +110,20 @@ export const useChat = () => {
     }
   };
 
+  const deleteChat = (chatId: string) => {
+    setChats((prev) => {
+      const newChats = prev.filter((chat) => chat.id !== chatId);
+      if (activeChatId === chatId) {
+        const newActiveChatId = newChats.length > 0 ? newChats[0].id : null;
+        setActiveChatId(newActiveChatId);
+        if (newActiveChatId === null) {
+          localStorage.removeItem("activeChatId");
+        }
+      }
+      return newChats;
+    });
+  };
+
   return {
     chats,
     activeChat,
@@ -117,5 +131,6 @@ export const useChat = () => {
     createNewChat,
     setActiveChatId,
     sendMessage,
+    deleteChat,
   };
 };

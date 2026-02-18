@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, MessageSquare, ChevronLeft, ChevronRight } from "lucide-react";
+import { Plus, MessageSquare, ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useChatContext } from "../contexts/ChatContext";
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const { chats, createNewChat, setActiveChatId, activeChat } = useChatContext();
+  const { chats, createNewChat, setActiveChatId, activeChat, deleteChat } = useChatContext();
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -41,16 +41,29 @@ const Sidebar = () => {
             {chats.map((chat) => (
               <li
                 key={chat.id}
-                className={`flex items-center p-4 hover:bg-slate-700 cursor-pointer ${
+                className={`flex items-center justify-between p-4 hover:bg-slate-700 cursor-pointer ${
                   activeChat?.id === chat.id ? "bg-slate-700" : ""
                 }`}
                 onClick={() => setActiveChatId(chat.id)}
               >
-                <MessageSquare size={20} className={!isCollapsed ? "mr-3" : ""} />
+                <div className="flex items-center truncate">
+                  <MessageSquare size={20} className={!isCollapsed ? "mr-3" : ""} />
+                  {!isCollapsed && (
+                    <span className="truncate">
+                      {chat.title || "New Chat"}
+                    </span>
+                  )}
+                </div>
                 {!isCollapsed && (
-                  <span className="truncate">
-                    {chat.title || "New Chat"}
-                  </span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteChat(chat.id);
+                    }}
+                    className="p-1 hover:bg-slate-600 rounded-md"
+                  >
+                    <X size={16} />
+                  </button>
                 )}
               </li>
             ))}
