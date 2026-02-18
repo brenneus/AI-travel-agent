@@ -52,8 +52,8 @@ Once you have the data, execute the workflow without stopping.
 * **FORMATTING RULES:**
     * `origin`: Use the IATA code (e.g., "JFK").
     * `destination`: Use the IATA code (e.g., "LHR").
-    * `depart_date`: Convert "next friday" etc. to `YYYY-MM-DD` format.
-    * `return_date`: Convert "following monday" etc. to `YYYY-MM-DD` format.
+    * `depart_date`: Must be in `YYYY-MM-DD` format. The user's requested departure date is not flexible and must be followed exactly.
+    * `return_date`: Must be in `YYYY-MM-DD` format. The user's requested return date is not flexible and must be followed exactly.
 
 **Step 2: Autonomous Selection**
 * Review the results from Step 1.

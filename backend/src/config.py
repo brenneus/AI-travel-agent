@@ -6,7 +6,7 @@ load_dotenv()
 class Config:
     # 1. Browser Settings
     # True - brower runs in background; False - browser window is visible
-    HEADLESS = False 
+    HEADLESS = True
     TIMEOUT = 30000 
     
     # 2. The Human Mask
@@ -14,4 +14,4 @@ class Config:
     USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
     
     # 3. Model Name
-    MODEL_NAME = "gemini-3-flash-preview"
+    MODEL_NAME = "gemini-3.0-flash-preview"

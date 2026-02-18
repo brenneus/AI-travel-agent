@@ -38,16 +38,33 @@ export default function Home() {
     );
   }
 
-  const renderMessageContent = (content: string) => {
-    try {
-      const parsed = JSON.parse(content);
-      if (parsed && typeof parsed === 'object' && 'booking_link' in parsed) {
-        return <FlightInfo data={parsed} />;
+  const renderMessageContent = (msg: { type: string; content: any }) => {
+    if (msg.type === 'tool') {
+      switch (msg.content) {
+        case 'search_outbound_flights':
+          return 'Selecting outbound flight...';
+        case 'search_return_flights':
+          return 'Selecting return flight...';
+        case 'generate_booking_link':
+          return 'Generating booking link...';
+        default:
+          return `Thinking...`;
       }
-    } catch (error) {
-      // Not a JSON object, so render as plain text
     }
-    return content;
+
+    let content = msg.content;
+    if (typeof content === 'string') {
+      try {
+        content = JSON.parse(content);
+      } catch (error) {
+        // Not a JSON object, so render as plain text
+        return content;
+      }
+    }
+    if (typeof content === 'object' && content !== null && content.booking_link) {
+      return <FlightInfo data={content} />;
+    }
+    return <>{content}</>
   };
 
   return (
@@ -68,7 +85,7 @@ export default function Home() {
                     : 'bg-slate-700 text-white'
                 } ${msg.type === 'tool' ? 'text-gray-400 italic' : ''}`}
               >
-                {renderMessageContent(msg.content)}
+                {renderMessageContent(msg)}
               </div>
             </div>
           ))}

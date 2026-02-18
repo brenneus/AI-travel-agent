@@ -44,7 +44,7 @@ async def chat_endpoint(request: ChatRequest):
                         tool_name = last_msg.tool_calls[0]["name"]
                         
                         # Format the data as a JSON string prefixed with "data: "
-                        payload = json.dumps({"type": "tool", "content": f"Running {tool_name}..."})
+                        payload = json.dumps({"type": "tool", "content": tool_name})
                         yield f"data: {payload}\n\n"
                     
                     # 2. Catch the Final Agent Response
@@ -59,9 +59,20 @@ async def chat_endpoint(request: ChatRequest):
                         else:
                             final_text = str(content)
                         
-                        if final_text: # Only send if it's not empty
-                            payload = json.dumps({"type": "message", "content": final_text})
-                            yield f"data: {payload}\n\n"
+                        if final_text:
+                            try:
+                                # Clean up the string to make it valid JSON
+                                cleaned_json_string = final_text.strip()
+                                if cleaned_json_string.startswith("```json"):
+                                    cleaned_json_string = cleaned_json_string[7:-3].strip()
+                                
+                                json_output = json.loads(cleaned_json_string)
+                                payload = json.dumps({"type": "message", "content": json_output})
+                                yield f"data: {payload}\n\n"
+                            except (json.JSONDecodeError, TypeError):
+                                # If it's not a valid JSON, send as plain text
+                                payload = json.dumps({"type": "message", "content": final_text})
+                                yield f"data: {payload}\n\n"
                             
         except Exception as e:
             error_payload = json.dumps({"type": "error", "content": str(e)})

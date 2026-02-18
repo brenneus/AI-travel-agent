@@ -74,6 +74,7 @@ export const useChat = () => {
 
     const userMessage: Message = { type: 'user', content: message };
     addMessage(userMessage);
+    addMessage({ type: 'agent', content: 'Thinking...' });
 
     try {
       const response = await fetch('http://localhost:8000/chat', {
@@ -97,11 +98,24 @@ export const useChat = () => {
         for (const event of events) {
           if (event.startsWith('data:')) {
             const data = JSON.parse(event.substring(5));
-            if (data.type === 'message') {
-              addMessage({ type: 'agent', content: data.content });
-            } else if (data.type === 'tool') {
-                addMessage({ type: 'tool', content: data.content });
-            }
+            const messageType = data.type === 'tool' ? 'tool' : 'agent';
+            const content = data.content;
+
+            setChats((prev) =>
+              prev.map((chat) => {
+                if (chat.id === activeChatId) {
+                  const newMessages = [...chat.messages];
+                  const lastMessage = newMessages[newMessages.length - 1];
+                  if (lastMessage && lastMessage.content === 'Thinking...') {
+                    newMessages[newMessages.length - 1] = { type: messageType, content };
+                  } else {
+                    newMessages.push({ type: messageType, content });
+                  }
+                  return { ...chat, messages: newMessages };
+                }
+                return chat;
+              })
+            );
           }
         }
       }
