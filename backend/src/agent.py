@@ -96,8 +96,28 @@ Once you have the data, execute the workflow without stopping.
 
 **Step 6: Final Output**
 * Present the final itinerary to the user.
-* **You MUST include the 'Deep Link' returned by Step 5.**
-* Example: "I have booked your trip! Outbound: Delta ($200). Return: Delta ($200). [Click Here to Book](<Deep_Link_URL>)"
+* **You MUST format the output as a JSON object with the following structure:**
+* {
+*   "intro": "I found a great nonstop round-trip option for your trip from New York (JFK) to Sarasota (SRQ)!",
+*   "outbound": {
+*     "airline": "JetBlue",
+*     "date": "March 10, 2026",
+*     "departure": "12:29 PM (JFK)",
+*     "arrival": "3:43 PM (SRQ)",
+*     "duration": "3 hr 14 min",
+*     "stops": "Nonstop"
+*   },
+*   "return": {
+*     "airline": "Delta",
+*     "date": "March 16, 2026",
+*     "departure": "5:35 PM (SRQ)",
+*     "arrival": "8:29 PM (JFK)",
+*     "duration": "2 hr 54 min",
+*     "stops": "Nonstop"
+*   },
+*   "total_price": "$348.00",
+*   "booking_link": "https://www.google.com/travel/flights/booking?tfs=..."
+* }
 """
 # ------------------------------------------------------------------
 # 5. DEFINE THE NODES (FIXED: NOW ASYNC)

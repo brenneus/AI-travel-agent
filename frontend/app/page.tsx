@@ -5,6 +5,8 @@ import { useChatContext } from './contexts/ChatContext';
 import Image from 'next/image';
 
 
+import FlightInfo from './components/FlightInfo';
+
 export default function Home() {
   const { activeChat, activeChatMessages, sendMessage } = useChatContext();
   const [input, setInput] = useState('');
@@ -36,6 +38,18 @@ export default function Home() {
     );
   }
 
+  const renderMessageContent = (content: string) => {
+    try {
+      const parsed = JSON.parse(content);
+      if (parsed && typeof parsed === 'object' && 'booking_link' in parsed) {
+        return <FlightInfo data={parsed} />;
+      }
+    } catch (error) {
+      // Not a JSON object, so render as plain text
+    }
+    return content;
+  };
+
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-y-auto p-4">
@@ -54,7 +68,7 @@ export default function Home() {
                     : 'bg-slate-700 text-white'
                 } ${msg.type === 'tool' ? 'text-gray-400 italic' : ''}`}
               >
-                {msg.content}
+                {renderMessageContent(msg.content)}
               </div>
             </div>
           ))}
