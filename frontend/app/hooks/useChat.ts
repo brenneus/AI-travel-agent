@@ -106,7 +106,7 @@ export const useChat = () => {
                 if (chat.id === activeChatId) {
                   const newMessages = [...chat.messages];
                   const lastMessage = newMessages[newMessages.length - 1];
-                  if (lastMessage && lastMessage.content === 'Thinking...') {
+                  if (lastMessage && (lastMessage.content === 'Thinking...' || lastMessage.type === 'tool')) {
                     newMessages[newMessages.length - 1] = { type: messageType, content };
                   } else {
                     newMessages.push({ type: messageType, content });

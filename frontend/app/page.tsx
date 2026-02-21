@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useChatContext } from './contexts/ChatContext';
 import Image from 'next/image';
+import { Loader2 } from 'lucide-react';
 
 
 import FlightInfo from './components/FlightInfo';
@@ -39,17 +40,35 @@ export default function Home() {
   }
 
   const renderMessageContent = (msg: { type: string; content: any }) => {
+    if (msg.content === 'Thinking...') {
+      return (
+        <div className="flex items-center">
+          <Loader2 className="animate-spin mr-2" size={20} />
+          <span>Thinking...</span>
+        </div>
+      );
+    }
     if (msg.type === 'tool') {
+      let text = '';
       switch (msg.content) {
         case 'search_outbound_flights':
-          return 'Selecting outbound flight...';
+          text = 'Selecting outbound flight...';
+          break;
         case 'search_return_flights':
-          return 'Selecting return flight...';
+          text = 'Selecting return flight...';
+          break;
         case 'generate_booking_link':
-          return 'Generating booking link...';
+          text = 'Generating booking link...';
+          break;
         default:
-          return `Thinking...`;
+          text = `Thinking...`;
       }
+      return (
+        <div className="flex items-center">
+            <Loader2 className="animate-spin mr-2" size={20} />
+            <span>{text}</span>
+        </div>
+      )
     }
 
     let content = msg.content;
