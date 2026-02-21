@@ -77,7 +77,9 @@ export default function Home() {
         content = JSON.parse(content);
       } catch (error) {
         // Not a JSON object, so render as plain text
-        return content;
+        return content.split('\n\n').map((paragraph, index) => (
+          <p key={index} className={index > 0 ? 'mt-4' : ''}>{paragraph}</p>
+        ));
       }
     }
     if (typeof content === 'object' && content !== null && content.booking_link) {

@@ -41,9 +41,14 @@ export const useChat = () => {
     const newChat: Chat = {
       id: crypto.randomUUID(),
       title: "New Chat",
-      messages: [],
+      messages: [
+        {
+          type: "agent",
+          content: "Welcome to Brenneus Travel Agent. I'm your personal assistant that will help you plan your next trip.\n\n Right now, I'm great at finding round-trip flights for solo travelers. I'm working on adding support for one-way routes, group bookings, and premium cabins, so stay tuned for those updates!\n\nIn the meantime, where are you thinking of flying to for your next return trip?",
+        },
+      ],
     };
-    setChats((prev) => [...prev, newChat]);
+    setChats((prev) => [newChat, ...prev]);
     setActiveChatId(newChat.id);
   };
 
