@@ -138,6 +138,14 @@ export const useChat = () => {
     });
   };
 
+  const editChat = (chatId: string, newTitle: string) => {
+    setChats((prev) =>
+      prev.map((chat) =>
+        chat.id === chatId ? { ...chat, title: newTitle } : chat
+      )
+    );
+  };
+
   return {
     chats,
     activeChat,
@@ -146,5 +154,6 @@ export const useChat = () => {
     setActiveChatId,
     sendMessage,
     deleteChat,
+    editChat,
   };
 };

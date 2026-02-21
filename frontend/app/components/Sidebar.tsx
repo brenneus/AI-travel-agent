@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, MessageSquare, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { Plus, MessageSquare, ChevronLeft, ChevronRight, Pencil, Trash2 } from "lucide-react";
 import { useChatContext } from "../contexts/ChatContext";
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const { chats, createNewChat, setActiveChatId, activeChat, deleteChat } = useChatContext();
+  const { chats, createNewChat, setActiveChatId, activeChat, deleteChat, editChat } = useChatContext();
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
@@ -20,7 +20,7 @@ const Sidebar = () => {
     >
       <div className="flex items-center justify-between p-4 border-b border-slate-700">
         {!isCollapsed && (
-          <h2 className="text-lg font-semibold">Chat History</h2>
+          <h2 className="text-lg font-semibold">Travel History</h2>
         )}
         <button onClick={toggleSidebar} className="p-2 hover:bg-slate-700 rounded-md">
           {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
@@ -55,15 +55,26 @@ const Sidebar = () => {
                   )}
                 </div>
                 {!isCollapsed && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteChat(chat.id);
-                    }}
-                    className="p-1 hover:bg-slate-600 rounded-md"
-                  >
-                    <X size={16} />
-                  </button>
+                  <div className="flex items-center">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        editChat(chat.id, prompt("Enter new title", chat.title) || chat.title);
+                      }}
+                      className="p-1 hover:bg-slate-600 rounded-md"
+                    >
+                      <Pencil size={16} />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteChat(chat.id);
+                      }}
+                      className="p-1 hover:bg-red-500 rounded-md"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
                 )}
               </li>
             ))}
