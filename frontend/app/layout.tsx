@@ -12,14 +12,15 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+import { Plane } from 'lucide-react';
+
 export const metadata: Metadata = {
-  title: "AI Travel Agent",
-  description: "Your personal AI travel assistant for seamless flight booking and itinerary planning.",
+  title: 'Brenneus Travel Agent',
+  description: 'Brenneus personal travel assistant for seamless flight booking and itinerary planning.',
 };
 
-import { ChatProvider } from "./contexts/ChatContext";
-import Sidebar from "./components/Sidebar";
-import Image from "next/image";
+import { ChatProvider } from './contexts/ChatContext';
+import Sidebar from './components/Sidebar';
 
 export default function RootLayout({
   children,
@@ -33,10 +34,10 @@ export default function RootLayout({
       >
         <ChatProvider>
           <div className="flex flex-col h-screen">
-            <header className="bg-slate-800 shadow-md p-4 flex items-center">
-              <Image src="/globe.svg" alt="Logo" width={40} height={40} />
+            <header className="bg-gradient-to-r from-slate-900 to-slate-800 shadow-md p-4 flex items-center">
+              <Plane className="text-white" size={32} />
               <h1 className="text-xl font-semibold ml-2 text-white">
-                AI Travel Agent
+                Brenneus Travel Agent
               </h1>
             </header>
             <div className="flex flex-1 overflow-hidden">
