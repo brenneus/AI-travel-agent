@@ -1,65 +1,138 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect, useRef } from 'react';
+import { useChatContext } from './contexts/ChatContext';
+import Image from 'next/image';
+import { Loader2 } from 'lucide-react';
+
+
+import FlightInfo from './components/FlightInfo';
 
 export default function Home() {
+  const { activeChat, activeChatMessages, sendMessage } = useChatContext();
+  const [input, setInput] = useState('');
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [activeChatMessages]);
+
+  const handleSendMessage = async () => {
+    if (input.trim() === '' || !activeChat) return;
+    sendMessage(input);
+    setInput('');
+  };
+
+  if (!activeChat) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-center">
+        <Image src="/window.svg" alt="AI Travel Agent" width={80} height={80} />
+        <h1 className="text-2xl font-semibold mt-4">AI Travel Agent</h1>
+        <p className="text-slate-400 mt-2">
+          Start a new conversation to plan your next trip.
+        </p>
+      </div>
+    );
+  }
+
+  const renderMessageContent = (msg: { type: string; content: any }) => {
+    if (msg.content === 'Thinking...') {
+      return (
+        <div className="flex items-center">
+          <Loader2 className="animate-spin mr-2" size={20} />
+          <span>Thinking...</span>
+        </div>
+      );
+    }
+    if (msg.type === 'tool') {
+      let text = '';
+      switch (msg.content) {
+        case 'search_outbound_flights':
+          text = 'Selecting outbound flight...';
+          break;
+        case 'search_return_flights':
+          text = 'Selecting return flight...';
+          break;
+        case 'generate_booking_link':
+          text = 'Generating booking link...';
+          break;
+        default:
+          text = `Thinking...`;
+      }
+      return (
+        <div className="flex items-center">
+            <Loader2 className="animate-spin mr-2" size={20} />
+            <span>{text}</span>
+        </div>
+      )
+    }
+
+    let content = msg.content;
+    if (typeof content === 'string') {
+      try {
+        content = JSON.parse(content);
+      } catch (error) {
+        // Not a JSON object, so render as plain text
+        return content.split('\n\n').map((paragraph, index) => (
+          <p key={index} className={index > 0 ? 'mt-4' : ''}>{paragraph}</p>
+        ));
+      }
+    }
+    if (typeof content === 'object' && content !== null && content.booking_link) {
+      return <FlightInfo data={content} />;
+    }
+    return <>{content}</>
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="flex flex-col h-full">
+      <div className="flex-1 overflow-y-auto p-4">
+        <div className="space-y-4">
+          {activeChatMessages.map((msg, index) => (
+            <div
+              key={index}
+              className={`flex ${
+                msg.type === 'user' ? 'justify-end' : 'justify-start'
+              }`}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              <div
+                className={`max-w-lg px-4 py-2 rounded-lg ${
+                  msg.type === 'user'
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-slate-700 text-white'
+                } ${msg.type === 'tool' ? 'text-gray-400 italic' : ''}`}
+              >
+                {renderMessageContent(msg)}
+              </div>
+            </div>
+          ))}
+          <div ref={messagesEndRef} />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      </div>
+
+      <div className="bg-slate-900 border-t border-slate-700 p-4">
+        <div className="flex items-center">
+          <input
+            type="text"
+            className="flex-1 bg-slate-700 border-slate-600 rounded-full px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+            placeholder="Ask about your travel plans..."
+          />
+          <button
+            onClick={handleSendMessage}
+            className="ml-2 bg-blue-500 text-white rounded-full px-4 py-2 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            Send
+          </button>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
+

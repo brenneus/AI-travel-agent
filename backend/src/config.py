@@ -6,7 +6,7 @@ load_dotenv()
 class Config:
     # 1. Browser Settings
     # True - brower runs in background; False - browser window is visible
-    HEADLESS = False 
+    HEADLESS = True
     TIMEOUT = 30000 
     
     # 2. The Human Mask
